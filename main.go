@@ -57,6 +57,7 @@ func main() {
 		if sticker, err := chooseSticker(update.Message.Text); err == nil {
 			file := tgbotapi.FileID(sticker)
 			msg := tgbotapi.NewSticker(update.Message.Chat.ID, file)
+			msg.ReplyToMessageID = update.Message.MessageID
 			timeoutMap[from] = time.Now().Unix()
 			if _, err := bot.Send(msg); err != nil {
 				log.Panic(err)
@@ -66,7 +67,7 @@ func main() {
 }
 
 func clearTimeout(timeoutMap *map[string]int64) {
-	cTime := time.Now().Add(-(time.Second * 15)).Unix()
+	cTime := time.Now().Add(-(time.Second * 25)).Unix()
 	for key, start := range *timeoutMap {
 		if cTime > start {
 			delete(*timeoutMap, key)
