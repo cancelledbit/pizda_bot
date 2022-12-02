@@ -1,0 +1,5 @@
+package stickers
+
+const Pizda = "CAACAgQAAxkBAAEGp1tjijXtr2D5U6k8sOiH8u0Dm4hnbgACkwEAAjPl4hVchh0Om9EItisE"
+const Minet = "CAACAgQAAxkBAAEGp11jijZCAnIzORNZ3toEYW7a3hLrjwACkQEAAjPl4hUAATXKzK6Do7IrBA"
+const Golovka = "CAACAgQAAxkBAAEGp2FjijZsOO-4qlhah9KXbJjK4DZu7wACjgEAAjPl4hUvI3VlUsQgtCsE"
