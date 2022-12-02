@@ -67,7 +67,7 @@ func main() {
 }
 
 func clearTimeout(timeoutMap *map[string]int64) {
-	cTime := time.Now().Add(-(time.Second * 15)).Unix()
+	cTime := time.Now().Add(-(time.Second * 25)).Unix()
 	for key, start := range *timeoutMap {
 		if cTime > start {
 			delete(*timeoutMap, key)
