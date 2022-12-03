@@ -2,19 +2,29 @@ package main
 
 import (
 	"context"
-	"errors"
 	"github.com/cancelledbit/pizda_bot/stickers"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"regexp"
+	"strconv"
 	"time"
 )
 
 func main() {
 	initEnv()
 	bot := initBot()
+
+	throttlingTimeout := 30
+	if os.Getenv("THROTTLING") != "" {
+		if throttlingEnv, err := strconv.Atoi(os.Getenv("THROTTLING")); err == nil {
+			if throttlingEnv/2 != 0 {
+				throttlingTimeout = throttlingEnv
+			} else {
+				log.Println("CANT USE VALUE LESS THAN 1 AS THROTTLING VALUE")
+			}
+		}
+	}
 
 	timeoutMap := make(map[string]int64)
 
@@ -26,13 +36,14 @@ func main() {
 		for {
 			select {
 			case <-tick:
-				clearTimeout(&timeoutMap)
+				clearTimeout(timeoutMap, throttlingTimeout)
 			case <-ctx.Done():
 				return
 			}
 		}
 	}
-	ticker := time.Tick(time.Second * 10)
+
+	ticker := time.Tick(time.Second * time.Duration(throttlingTimeout/2))
 
 	go updateTimeout(ctx, ticker)
 	u := tgbotapi.NewUpdate(0)
@@ -54,7 +65,7 @@ func main() {
 			continue
 		}
 
-		if sticker, err := chooseSticker(update.Message.Text); err == nil {
+		if sticker, err := stickers.GetStickerBy(update.Message.Text); err == nil {
 			file := tgbotapi.FileID(sticker)
 			msg := tgbotapi.NewSticker(update.Message.Chat.ID, file)
 			msg.ReplyToMessageID = update.Message.MessageID
@@ -66,11 +77,11 @@ func main() {
 	}
 }
 
-func clearTimeout(timeoutMap *map[string]int64) {
-	cTime := time.Now().Add(-(time.Second * 25)).Unix()
-	for key, start := range *timeoutMap {
+func clearTimeout(timeoutMap map[string]int64, timeout int) {
+	cTime := time.Now().Add(-(time.Second * time.Duration(timeout))).Unix()
+	for key, start := range timeoutMap {
 		if cTime > start {
-			delete(*timeoutMap, key)
+			delete(timeoutMap, key)
 		}
 	}
 }
@@ -89,20 +100,4 @@ func initBot() (bot *tgbotapi.BotAPI) {
 	}
 	bot.Debug = true
 	return
-}
-
-func chooseSticker(msg string) (string, error) {
-	r, _ := regexp.Compile("^[Дд][Аа][!.?]{0,3}$")
-	if r.MatchString(msg) {
-		return stickers.Pizda, nil
-	}
-	r, _ = regexp.Compile("^[Нн][Ее][Тт][!.?]{0,3}$")
-	if r.MatchString(msg) {
-		return stickers.Minet, nil
-	}
-	r, _ = regexp.Compile("^[Яя][!.?]{0,3}$")
-	if r.MatchString(msg) {
-		return stickers.Golovka, nil
-	}
-	return "", errors.New("unknown")
 }
