@@ -2,7 +2,11 @@ package main
 
 import (
 	"context"
-	"github.com/cancelledbit/pizda_bot/stickers"
+	"database/sql"
+	"github.com/cancelledbit/pizda_bot/app/repository"
+	"github.com/cancelledbit/pizda_bot/app/stat"
+	"github.com/cancelledbit/pizda_bot/app/stickers"
+	_ "github.com/go-sql-driver/mysql"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
 	"log"
@@ -15,16 +19,7 @@ func main() {
 	initEnv()
 	bot := initBot()
 
-	throttlingTimeout := 30
-	if os.Getenv("THROTTLING") != "" {
-		if throttlingEnv, err := strconv.Atoi(os.Getenv("THROTTLING")); err == nil {
-			if throttlingEnv/2 != 0 {
-				throttlingTimeout = throttlingEnv
-			} else {
-				log.Println("CANT USE VALUE LESS THAN 1 AS THROTTLING VALUE")
-			}
-		}
-	}
+	throttlingTimeout := getThrottlingTimeout()
 
 	timeoutMap := make(map[string]int64)
 
@@ -46,6 +41,15 @@ func main() {
 	ticker := time.Tick(time.Second * time.Duration(throttlingTimeout/2))
 
 	go updateTimeout(ctx, ticker)
+
+	db := repository.GetDbPool()
+	defer func(db *sql.DB) {
+		err := db.Close()
+		if err != nil {
+			log.Println(err)
+		}
+	}(db)
+	statHandler := stat.NewStatHandler(db)
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
@@ -66,7 +70,8 @@ func main() {
 		}
 
 		if sticker, err := stickers.GetStickerBy(update.Message.Text); err == nil {
-			file := tgbotapi.FileID(sticker)
+			statHandler.PushStat(update.Message, sticker.Name)
+			file := tgbotapi.FileID(sticker.ID)
 			msg := tgbotapi.NewSticker(update.Message.Chat.ID, file)
 			msg.ReplyToMessageID = update.Message.MessageID
 			timeoutMap[from] = time.Now().Unix()
@@ -100,4 +105,18 @@ func initBot() (bot *tgbotapi.BotAPI) {
 	}
 	bot.Debug = true
 	return
+}
+
+func getThrottlingTimeout() int {
+	throttlingTimeout := 30
+	if os.Getenv("THROTTLING") != "" {
+		if throttlingEnv, err := strconv.Atoi(os.Getenv("THROTTLING")); err == nil {
+			if throttlingEnv/2 != 0 {
+				throttlingTimeout = throttlingEnv
+			} else {
+				log.Println("CANT USE VALUE LESS THAN 1 AS THROTTLING VALUE")
+			}
+		}
+	}
+	return throttlingTimeout
 }

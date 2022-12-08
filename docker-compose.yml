@@ -1,0 +1,26 @@
+version: '3.1'
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MYSQL_PWD}
+      MARIADB_DATABASE: ${DB_NAME}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb:/var/lib/mysql
+  migration-tool:
+    build: ./migrations
+    platform: linux/amd64
+    environment:
+      MYSQL_CONNECTION_STRING: ${MYSQL_CONNECTION_STRING}
+    depends_on:
+      - "db"
+  app:
+    build: .
+    depends_on:
+      - "migration-tool"
+volumes:
+  mariadb:
