@@ -13,7 +13,7 @@ services:
       - mariadb:/var/lib/mysql
   migration-tool:
     build: ./migrations
-    platform: linux/amd64
+   #platform: linux/amd64
     environment:
       MYSQL_CONNECTION_STRING: ${MYSQL_CONNECTION_STRING}
     depends_on:
