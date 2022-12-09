@@ -3,11 +3,12 @@ FROM golang:1.19-alpine AS build
 WORKDIR /pizda_bot
 
 COPY ./app ./
-COPY ./.env ./.env
 
+RUN go mod tidy
 RUN go mod download
-
 RUN go build -o /pbot
+
+WORKDIR /web
 
 ## Deploy
 FROM alpine:3.17

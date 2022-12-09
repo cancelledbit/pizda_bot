@@ -8,7 +8,7 @@ services:
       MARIADB_ROOT_PASSWORD: ${MYSQL_PWD}
       MARIADB_DATABASE: ${DB_NAME}
     ports:
-      - "3306:3306"
+      - "127.0.0.1:3306:3306"
     volumes:
       - mariadb:/var/lib/mysql
   migration-tool:
@@ -21,8 +21,18 @@ services:
     depends_on:
       - "db"
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
     depends_on:
       - "migration-tool"
+  web:
+    build:
+      context: .
+      dockerfile: ./web/Dockerfile
+    depends_on:
+      - "db"
+    ports:
+      - "3000:3000"
 volumes:
   mariadb:
