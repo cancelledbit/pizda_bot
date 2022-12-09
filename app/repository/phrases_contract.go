@@ -13,6 +13,8 @@ type Phrase struct {
 	UpdatedAt       time.Time `json:"updated_at"`
 }
 
+type Phrases map[int]*Phrase
+
 type PhraseRepository interface {
 	Create(phrase *Phrase) (*Phrase, error)
 	Get(id int) (*Phrase, error)

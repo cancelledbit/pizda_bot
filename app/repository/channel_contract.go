@@ -11,6 +11,8 @@ type Channel struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 }
 
+type Channels map[int]*Channel
+
 type ChannelRepository interface {
 	Create(channel *Channel) (*Channel, error)
 	Get(id int) (*Channel, error)
