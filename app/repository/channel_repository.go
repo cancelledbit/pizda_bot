@@ -35,14 +35,14 @@ func (r *MysqlChannelRepository) Create(channel *Channel) (*Channel, error) {
 func (r *MysqlChannelRepository) Get(id int) (*Channel, error) {
 	ctx, cancel := context.WithTimeout(r.ctx, 15*time.Second)
 	defer cancel()
-	var channel *Channel
+	var channel Channel
 
 	query := "SELECT id, channel_id, channel_name, type, created_at, updated_at FROM channels WHERE id = $1"
-	err := r.fetchRow(r.db.QueryRowContext(ctx, query, id), channel)
+	err := r.fetchRow(r.db.QueryRowContext(ctx, query, id), &channel)
 	if err != nil {
 		return nil, err
 	}
-	return channel, nil
+	return &channel, nil
 }
 
 func (r *MysqlChannelRepository) GetByOffset(offset int, limit int) (*Channels, error) {
@@ -56,12 +56,12 @@ func (r *MysqlChannelRepository) GetByOffset(offset int, limit int) (*Channels, 
 	}
 	channels := make(Channels)
 	for rows.Next() {
-		var channel *Channel
-		err := r.fetchRows(rows, channel)
+		var channel Channel
+		err := r.fetchRows(rows, &channel)
 		if err != nil {
 			return nil, err
 		}
-		channels[channel.ID] = channel
+		channels[channel.ID] = &channel
 	}
 	return &channels, nil
 }

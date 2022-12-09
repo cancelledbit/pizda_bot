@@ -46,12 +46,12 @@ func (r MysqlPhrasesRepository) Get(id int) (*Phrase, error) {
 	ctx, cancel := context.WithTimeout(r.ctx, 15*time.Second)
 	defer cancel()
 
-	var phrase *Phrase
-	err := r.fetchRow(r.db.QueryRowContext(ctx, query, id), phrase)
+	var phrase Phrase
+	err := r.fetchRow(r.db.QueryRowContext(ctx, query, id), &phrase)
 	if err != nil {
 		return nil, err
 	}
-	return phrase, nil
+	return &phrase, nil
 }
 
 func (r *MysqlPhrasesRepository) GetByOffset(offset int, limit int) (*Phrases, error) {
@@ -65,12 +65,12 @@ func (r *MysqlPhrasesRepository) GetByOffset(offset int, limit int) (*Phrases, e
 	}
 	phrases := make(Phrases)
 	for rows.Next() {
-		var phrase *Phrase
-		err := r.fetchRows(rows, phrase)
+		var phrase Phrase
+		err := r.fetchRows(rows, &phrase)
 		if err != nil {
 			return nil, err
 		}
-		phrases[phrase.ID] = phrase
+		phrases[phrase.ID] = &phrase
 	}
 	return &phrases, nil
 }
