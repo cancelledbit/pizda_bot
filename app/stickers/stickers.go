@@ -5,12 +5,12 @@ import (
 	"regexp"
 )
 
-const Pizda = "CAACAgQAAxkBAAEGp1tjijXtr2D5U6k8sOiH8u0Dm4hnbgACkwEAAjPl4hVchh0Om9EItisE"
-const Minet = "CAACAgQAAxkBAAEGp11jijZCAnIzORNZ3toEYW7a3hLrjwACkQEAAjPl4hUAATXKzK6Do7IrBA"
-const Golovka = "CAACAgQAAxkBAAEGp2FjijZsOO-4qlhah9KXbJjK4DZu7wACjgEAAjPl4hUvI3VlUsQgtCsE"
-const Noga = "CAACAgQAAxkBAAEGqW9jiy53_U2rAq1zXnh_CWtAFMfgNQACkgEAAjPl4hWqAbtFfYNHTCsE"
-const Plecho = "CAACAgQAAxkBAAEGqXFjiy6iVSF_Ef85Feh4TZvQl2NBswACjwEAAjPl4hU0OKNGHbQi-SsE"
-const VGovne = "CAACAgQAAxkBAAEGqXNjiy7Rqv7xzKhY2f485s3R1Y02dgAClAEAAjPl4hWDe5gGCZpsOSsE"
+const Pizda = "CAACAgIAAxkBAAEHOZhjwEsfquuRaCqEBU_U182GOZYuCgACHCAAAjSc8UnGh3clJRWcTC0E"
+const Minet = "CAACAgIAAxkBAAEHOZpjwEtGZ4pNgR6APnYa97akzvooGgAClyEAAsn48EkRMGHyM7t0sy0E"
+const Golovka = "CAACAgIAAxkBAAEHOZxjwEtywoFWsE69uoflXkAHLLI7wAACkB8AAjEQ8UnAWWWzeHqdmi0E"
+const Noga = "CAACAgIAAxkBAAEHOZ5jwEuOAAG3rYZyO5iAV_dPZBnK4nsAAuUlAAIT-PlJxOxD5v5rRUItBA"
+const Plecho = "CAACAgIAAxkBAAEHOaBjwEujfGPeM4Yu1pq6Gdncp2l-VQACESUAAlGP8Endvec9raBNri0E"
+const VGovne = "CAACAgIAAxkBAAEHOaJjwEvAdmTt5FmVHl3PLRXbshur7QACvSIAApjG8Un83RlK-rjfqy0E"
 
 type Sticker struct {
 	Name string
