@@ -69,7 +69,7 @@ func main() {
 			continue
 		}
 
-		limitTs := time.Now().Add(-1 * time.Minute)
+		limitTs := time.Now().Add(-2 * time.Minute)
 		if update.Message.Time().Before(limitTs) {
 			continue
 		}
