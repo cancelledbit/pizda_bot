@@ -75,9 +75,10 @@ func main() {
 			msg := tgbotapi.NewSticker(update.Message.Chat.ID, file)
 			msg.ReplyToMessageID = update.Message.MessageID
 			timeoutMap[from] = time.Now().Unix()
-			if _, err := bot.Send(msg); err != nil {
-				log.Println(err)
-			}
+			log.Println(msg)
+			//if _, err := bot.Send(msg); err != nil {
+			//	log.Println(err)
+			//}
 		}
 	}
 }
