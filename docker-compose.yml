@@ -24,6 +24,7 @@ services:
     build:
       context: .
       dockerfile: ./app/Dockerfile
+    restart: always
     depends_on:
       - "migration-tool"
   web:
