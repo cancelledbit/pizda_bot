@@ -69,16 +69,21 @@ func main() {
 			continue
 		}
 
+		limitTs := time.Now().Add(-1 * time.Minute)
+		if update.Message.Time().Before(limitTs) {
+			continue
+		}
+
 		if sticker, err := stickers.GetStickerBy(update.Message.Text); err == nil {
 			statHandler.PushStat(update.Message, sticker.Name)
 			file := tgbotapi.FileID(sticker.ID)
 			msg := tgbotapi.NewSticker(update.Message.Chat.ID, file)
 			msg.ReplyToMessageID = update.Message.MessageID
 			timeoutMap[from] = time.Now().Unix()
-			log.Println(msg)
-			//if _, err := bot.Send(msg); err != nil {
-			//	log.Println(err)
-			//}
+
+			if _, err := bot.Send(msg); err != nil {
+				log.Println(err)
+			}
 		}
 	}
 }
