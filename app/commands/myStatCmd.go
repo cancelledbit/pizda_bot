@@ -26,7 +26,7 @@ func (c MyStatCmd) Execute(cmd *tgbotapi.Message) {
 	defer cancel()
 	r := repository.NewMysqlPhrasesRepository(ctx, c.db)
 
-	phrases, err := r.GetPhrasesByUserId(cmd.From.ID)
+	phrases, err := r.GetPhrasesByUserId(cmd.From.UserName)
 	if err != nil {
 		log.Println(err)
 		return

@@ -54,8 +54,8 @@ func (r MysqlPhrasesRepository) Get(id int) (*Phrase, error) {
 	return &phrase, nil
 }
 
-func (r MysqlPhrasesRepository) GetPhrasesByUserId(senderId int64) (*Phrases, error) {
-	query := "SELECT * FROM phrases WHERE sender_chan_id = ?"
+func (r MysqlPhrasesRepository) GetPhrasesByUserId(senderId string) (*Phrases, error) {
+	query := "SELECT * FROM phrases WHERE sender_id = ?"
 
 	ctx, cancel := context.WithTimeout(r.ctx, 15*time.Second)
 	defer cancel()

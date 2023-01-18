@@ -67,6 +67,7 @@ func main() {
 		}
 
 		if update.Message.IsCommand() {
+			timeoutMap[from] = time.Now().Unix()
 			cmdHandler.Handle(update.Message)
 		}
 
