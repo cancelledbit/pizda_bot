@@ -22,7 +22,7 @@ func (c MyStatCmd) Match(cmd *tgbotapi.Message) bool {
 }
 
 func (c MyStatCmd) Execute(cmd *tgbotapi.Message) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 	r := repository.NewMysqlPhrasesRepository(ctx, c.db)
 
