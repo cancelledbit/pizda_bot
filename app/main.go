@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"github.com/cancelledbit/pizda_bot/app/commands"
 	"github.com/cancelledbit/pizda_bot/app/repository"
 	"github.com/cancelledbit/pizda_bot/app/stat"
 	"github.com/cancelledbit/pizda_bot/app/stickers"
@@ -54,19 +55,19 @@ func main() {
 	u.Timeout = 60
 
 	updates := bot.GetUpdatesChan(u)
-
+	cmdHandler := commands.GetHandler(db, bot)
 	for update := range updates {
 		if update.Message == nil { // ignore any non-Message updates
-			continue
-		}
-
-		if update.Message.IsCommand() { // ignore any non-command Messages
 			continue
 		}
 
 		from := update.Message.From.String()
 		if _, ok := timeoutMap[from]; ok {
 			continue
+		}
+
+		if update.Message.IsCommand() {
+			cmdHandler.Handle(update.Message)
 		}
 
 		limitTs := time.Now().Add(-2 * time.Minute)

@@ -41,7 +41,7 @@ func (r MysqlPhrasesRepository) Create(phrase *Phrase) (*Phrase, error) {
 }
 
 func (r MysqlPhrasesRepository) Get(id int) (*Phrase, error) {
-	query := "SELECT id, sender_chan_id, sender_id, sender_name, phrase, reply_id, created_at, updated_at FROM phrases WHERE id = $1"
+	query := "SELECT id, sender_chan_id, sender_id, sender_name, phrase, reply_id, created_at, updated_at FROM phrases WHERE id = ?"
 
 	ctx, cancel := context.WithTimeout(r.ctx, 15*time.Second)
 	defer cancel()
@@ -52,6 +52,28 @@ func (r MysqlPhrasesRepository) Get(id int) (*Phrase, error) {
 		return nil, err
 	}
 	return &phrase, nil
+}
+
+func (r MysqlPhrasesRepository) GetPhrasesByUserId(senderId int64) (*Phrases, error) {
+	query := "SELECT * FROM phrases WHERE sender_chan_id = ?"
+
+	ctx, cancel := context.WithTimeout(r.ctx, 15*time.Second)
+	defer cancel()
+
+	rows, err := r.db.QueryContext(ctx, query, senderId)
+	if err != nil {
+		return nil, err
+	}
+	phrases := make(Phrases)
+	for rows.Next() {
+		var phrase Phrase
+		err := r.fetchRows(rows, &phrase)
+		if err != nil {
+			return nil, err
+		}
+		phrases[phrase.ID] = &phrase
+	}
+	return &phrases, nil
 }
 
 func (r *MysqlPhrasesRepository) GetByOffset(offset int, limit int) (*Phrases, error) {
