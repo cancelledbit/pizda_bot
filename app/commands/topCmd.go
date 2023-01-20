@@ -40,7 +40,7 @@ func (c TopCmd) Execute(cmd *tgbotapi.Message) {
 func getTopCmd(db *sql.DB, bot *tgbotapi.BotAPI) TopCmd {
 	return TopCmd{
 		dbCmd{
-			Name: "stat",
+			Name: "top",
 			DB:   db,
 			Bot:  bot,
 		},
