@@ -77,7 +77,7 @@ func (r MysqlPhrasesRepository) GetPhrasesByUserId(senderId string) (*Phrases, e
 }
 
 func (r MysqlPhrasesRepository) GetTop(channelId string, count int) (map[string]int, error) {
-	query := "SELECT count(1) as cnt, sender_name FROM phrases WHERE sender_chan_id = ? GROUP BY sender_id ORDER BY cnt LIMIT ?"
+	query := "SELECT count(1) as cnt, sender_name FROM phrases WHERE sender_chan_id = ? GROUP BY sender_id ORDER BY cnt DESC LIMIT ?"
 
 	ctx, cancel := context.WithTimeout(r.ctx, 15*time.Second)
 	defer cancel()
