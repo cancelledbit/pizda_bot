@@ -11,20 +11,14 @@ import (
 	"time"
 )
 
-type MyStatCmd struct {
-	name string
-	db   *sql.DB
-	bot  *tgbotapi.BotAPI
+type StatCmd struct {
+	dbCmd
 }
 
-func (c MyStatCmd) Match(cmd *tgbotapi.Message) bool {
-	return c.name == cmd.Command()
-}
-
-func (c MyStatCmd) Execute(cmd *tgbotapi.Message) {
+func (c StatCmd) Execute(cmd *tgbotapi.Message) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
-	r := repository.NewMysqlPhrasesRepository(ctx, c.db)
+	r := repository.NewMysqlPhrasesRepository(ctx, c.DB)
 
 	phrases, err := r.GetPhrasesByUserId(cmd.From.UserName)
 	if err != nil {
@@ -39,16 +33,18 @@ func (c MyStatCmd) Execute(cmd *tgbotapi.Message) {
 	}
 	reply := tgbotapi.NewMessage(cmd.Chat.ID, fmt.Sprintf("Всего срабатываний: %d", total))
 	reply.ReplyToMessageID = cmd.MessageID
-	_, err = c.bot.Send(reply)
+	_, err = c.Bot.Send(reply)
 	if err != nil {
 		log.Println(err)
 	}
 }
 
-func getMyStatCmd(db *sql.DB, bot *tgbotapi.BotAPI) MyStatCmd {
-	return MyStatCmd{
-		name: "stat",
-		db:   db,
-		bot:  bot,
+func getMyStatCmd(db *sql.DB, bot *tgbotapi.BotAPI) StatCmd {
+	return StatCmd{
+		dbCmd{
+			Name: "stat",
+			DB:   db,
+			Bot:  bot,
+		},
 	}
 }

@@ -76,6 +76,29 @@ func (r MysqlPhrasesRepository) GetPhrasesByUserId(senderId string) (*Phrases, e
 	return &phrases, nil
 }
 
+func (r MysqlPhrasesRepository) GetTop(channelId string, count int) (map[string]int, error) {
+	query := "SELECT count(1) as cnt, sender_name FROM phrases WHERE sender_chan_id = ? GROUP BY sender_id LIMIT ?"
+
+	ctx, cancel := context.WithTimeout(r.ctx, 15*time.Second)
+	defer cancel()
+
+	rows, err := r.db.QueryContext(ctx, query, channelId, count)
+	if err != nil {
+		return nil, err
+	}
+	top := make(map[string]int)
+	for rows.Next() {
+		var name string
+		var number int
+		rows.Scan(
+			&number,
+			&name,
+		)
+		top[name] = number
+	}
+	return top, nil
+}
+
 func (r *MysqlPhrasesRepository) GetByOffset(offset int, limit int) (*Phrases, error) {
 	ctx, cancel := context.WithTimeout(r.ctx, 15*time.Second)
 	defer cancel()
