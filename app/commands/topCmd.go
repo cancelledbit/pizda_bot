@@ -26,8 +26,8 @@ func (c TopCmd) Execute(cmd *tgbotapi.Message) {
 		return
 	}
 	text := ""
-	for name, count := range top {
-		text = text + fmt.Sprintf("%s: %d \n", name, count)
+	for _, t := range top {
+		text = text + fmt.Sprintf("%s: %d \n", t.Name, t.Count)
 	}
 	reply := tgbotapi.NewMessage(cmd.Chat.ID, text)
 	reply.ReplyToMessageID = cmd.MessageID

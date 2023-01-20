@@ -76,7 +76,7 @@ func (r MysqlPhrasesRepository) GetPhrasesByUserId(senderId string) (*Phrases, e
 	return &phrases, nil
 }
 
-func (r MysqlPhrasesRepository) GetTop(channelId string, count int) (map[string]int, error) {
+func (r MysqlPhrasesRepository) GetTop(channelId string, count int) ([]*TopElement, error) {
 	query := "SELECT count(1) as cnt, sender_name FROM phrases WHERE sender_chan_id = ? GROUP BY sender_id ORDER BY cnt DESC LIMIT ?"
 
 	ctx, cancel := context.WithTimeout(r.ctx, 15*time.Second)
@@ -86,15 +86,14 @@ func (r MysqlPhrasesRepository) GetTop(channelId string, count int) (map[string]
 	if err != nil {
 		return nil, err
 	}
-	top := make(map[string]int)
+	top := make([]*TopElement, 0)
 	for rows.Next() {
-		var name string
-		var number int
+		var t TopElement
 		rows.Scan(
-			&number,
-			&name,
+			&t.Count,
+			&t.Name,
 		)
-		top[name] = number
+		top = append(top, &t)
 	}
 	return top, nil
 }

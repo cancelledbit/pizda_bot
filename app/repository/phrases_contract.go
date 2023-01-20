@@ -19,3 +19,8 @@ type PhraseRepository interface {
 	Create(phrase *Phrase) (*Phrase, error)
 	Get(id int) (*Phrase, error)
 }
+
+type TopElement struct {
+	Name  string
+	Count int
+}
