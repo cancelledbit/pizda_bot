@@ -30,7 +30,7 @@ func getRuleset() rulesetMap {
 			{ID: "CAACAgIAAxkBAAEHOZhjwEsfquuRaCqEBU_U182GOZYuCgACHCAAAjSc8UnGh3clJRWcTC0E", Name: "Pizda"},
 			{ID: "CAACAgIAAxkBAAEHUqhjx_U6-jJsimqM31XiMaS1bRarQgAC5QAD5EXyIhs2qo0Jf12kLQQ", Name: "Pizda"},
 		},
-		"(\\s+|^)[Нн][ЕеEe][Тт][!.?]{0,3}$": &StickerList{
+		"^[Нн][ЕеEe][Тт][!.?]{0,3}$": &StickerList{
 			{ID: "CAACAgIAAxkBAAEHOZpjwEtGZ4pNgR6APnYa97akzvooGgAClyEAAsn48EkRMGHyM7t0sy0E", Name: "Minet"},
 			{ID: "CAACAgIAAxkBAAEHUqJjx_Sm-pLiIUutMXQeVMfb1mU8kQACEiIAAjzZ-Ukiy3xs84cpCS0E", Name: "PidoraOtvet"},
 		},
