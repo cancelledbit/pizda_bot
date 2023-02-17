@@ -11,6 +11,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
 	"log"
+	"math/rand"
 	"os"
 	"strconv"
 	"time"
@@ -81,6 +82,9 @@ func main() {
 			file := tgbotapi.FileID(sticker.ID)
 			msg := tgbotapi.NewSticker(update.Message.Chat.ID, file)
 			msg.ReplyToMessageID = update.Message.MessageID
+			if !isShouldReply() {
+				continue
+			}
 			timeoutMap[from] = time.Now().Unix()
 
 			if _, err := bot.Send(msg); err != nil {
@@ -127,4 +131,16 @@ func getThrottlingTimeout() int {
 		}
 	}
 	return throttlingTimeout
+}
+
+func isShouldReply() bool {
+	chance := 5
+	if os.Getenv("THROTTLING") != "" {
+		if chanceEnv, err := strconv.Atoi(os.Getenv("CHANCE")); err == nil {
+			chance = chanceEnv
+		} else {
+			log.Printf("chance not set using default %d", chance)
+		}
+	}
+	return rand.Intn(chance) == 1
 }
