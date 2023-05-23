@@ -25,6 +25,6 @@ func (h CommandHandler) Handle(cmd *tgbotapi.Message) {
 
 func GetHandler(db *sql.DB, bot *tgbotapi.BotAPI) CommandHandler {
 	return CommandHandler{
-		list: []CommandInterface{getMyStatCmd(db, bot), getTopCmd(db, bot)},
+		list: []CommandInterface{getMyStatCmd(db, bot), getTopCmd(db, bot), getEUCmd(db, bot)},
 	}
 }
