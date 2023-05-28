@@ -13,6 +13,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"regexp"
 	"strconv"
 	"time"
 )
@@ -63,17 +64,19 @@ func main() {
 		}
 
 		from := update.Message.From.String()
+		handleSpecialChatEvents(update, db)
 		if _, ok := timeoutMap[from]; ok {
+			continue
+		}
+
+		limitTs := time.Now().Add(-2 * time.Minute)
+		if update.Message.Time().Before(limitTs) {
 			continue
 		}
 
 		if update.Message.IsCommand() {
 			timeoutMap[from] = time.Now().Unix()
 			cmdHandler.Handle(update.Message)
-		}
-
-		limitTs := time.Now().Add(-2 * time.Minute)
-		if update.Message.Time().Before(limitTs) {
 			continue
 		}
 
@@ -89,6 +92,20 @@ func main() {
 
 			if _, err := bot.Send(msg); err != nil {
 				log.Println(err)
+			}
+		}
+	}
+}
+
+func handleSpecialChatEvents(update tgbotapi.Update, db *sql.DB) {
+	if update.Message.From.ID == 5167519420 {
+		pattern := "/(\\sпис[яею])|(\\sпоп[аук])|(износ)|(\\sвон[яю])|(\\sнож[ек])|(\\sслад)|(\\sхагз)|(\\sдево[нч])|(черк)|(лиза)|(\\sкончи)|(\\sжоп)/u"
+		if rgx, err := regexp.Compile(pattern); err == nil {
+			log.Println("compiled")
+			if rgx.MatchString(update.Message.Text) {
+				log.Println("matched")
+				r := repository.NewMysqlEUPhrasesRepository(context.Background(), db)
+				_, _ = r.Create(&repository.EUPhrase{Text: update.Message.Text})
 			}
 		}
 	}
@@ -135,7 +152,7 @@ func getThrottlingTimeout() int {
 
 func isShouldReply() bool {
 	chance := 5
-	if os.Getenv("THROTTLING") != "" {
+	if os.Getenv("CHANCE") != "" {
 		if chanceEnv, err := strconv.Atoi(os.Getenv("CHANCE")); err == nil {
 			chance = chanceEnv
 		} else {
