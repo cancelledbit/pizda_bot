@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.1'
 
 services:
   db:
@@ -13,8 +13,6 @@ services:
       - mariadb:/var/lib/mysql
   migration-tool:
     build: ./migrations
-    profiles:
-      - tools
    #platform: linux/amd64
     environment:
       MYSQL_PWD: ${MYSQL_PWD}

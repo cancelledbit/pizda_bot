@@ -36,7 +36,7 @@ func (c EUCmd) Execute(cmd *tgbotapi.Message) {
 func getEUCmd(db *sql.DB, bot *tgbotapi.BotAPI) EUCmd {
 	return EUCmd{
 		dbCmd{
-			Name: "EU",
+			Name: "EU|eu",
 			DB:   db,
 			Bot:  bot,
 		},
