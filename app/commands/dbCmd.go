@@ -3,6 +3,7 @@ package commands
 import (
 	"database/sql"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"regexp"
 )
 
 type dbCmd struct {
@@ -12,5 +13,9 @@ type dbCmd struct {
 }
 
 func (c dbCmd) Match(cmd *tgbotapi.Message) bool {
-	return c.Name == cmd.Command()
+	r, e := regexp.Compile(c.Name)
+	if e != nil {
+		return false
+	}
+	return r.MatchString(cmd.Command())
 }
