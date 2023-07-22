@@ -110,6 +110,18 @@ func handleSpecialChatEvents(update tgbotapi.Update, db *sql.DB) {
 			}
 		}
 	}
+
+	if update.Message.From.ID == 5865654725 {
+		pattern := "/(ир[ао])/(секс)|(муж)|(п[еи]зд)|(сос)/iu"
+		if rgx, err := regexp.Compile(pattern); err == nil {
+			log.Println("compiled")
+			if rgx.MatchString(update.Message.Text) {
+				log.Println("matched")
+				r := repository.NewMysqlHagzorPhrasesRepository(context.Background(), db)
+				_, _ = r.Create(&repository.HagzorPhrase{Text: update.Message.Text})
+			}
+		}
+	}
 }
 
 func clearTimeout(timeoutMap map[string]int64, timeout int) {
