@@ -100,7 +100,7 @@ func main() {
 
 func handleSpecialChatEvents(update tgbotapi.Update, db *sql.DB) {
 	if update.Message.From.ID == 5167519420 {
-		pattern := "/(\\sпис[яею])|(\\sпоп[аук])|(износ)|(\\sвон[яю])|(\\sнож[ек])|(\\sслад)|(\\sхагз)|(\\sдево[нч])|(черк)|(лиза)|(\\sкончи)|(\\sжоп)|(\\sузбе)|(\\s😍)|(\\s😌)/u"
+		pattern := "/\\s?((пис[яею])|(поп[аук])|(износ)|(вон[яю])|(нож[ек])|(слад)|(хагз)|(ир[аоу])|(sдево[нч])|(черк)|(лиза)|(кончи)|(жоп)|(узбе)|(😍)|(😌))/iu"
 		if rgx, err := regexp.Compile(pattern); err == nil {
 			log.Println("compiled")
 			if rgx.MatchString(update.Message.Text) {
@@ -112,7 +112,7 @@ func handleSpecialChatEvents(update tgbotapi.Update, db *sql.DB) {
 	}
 
 	if update.Message.From.ID == 5865654725 {
-		pattern := "/(\\sир[ао])|(\\sсекс)|(\\sмуж)|(\\sп[еи]зд)|(\\sсос)/iu"
+		pattern := "/\\s((sир[аоу])|(секс)|(муж)|(п[еи]зд)|(сос))/iu"
 		if rgx, err := regexp.Compile(pattern); err == nil {
 			log.Println("compiled")
 			if rgx.MatchString(update.Message.Text) {
