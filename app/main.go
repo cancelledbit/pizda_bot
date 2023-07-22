@@ -3,6 +3,13 @@ package main
 import (
 	"context"
 	"database/sql"
+	"log"
+	"math/rand"
+	"os"
+	"regexp"
+	"strconv"
+	"time"
+
 	"github.com/cancelledbit/pizda_bot/app/commands"
 	"github.com/cancelledbit/pizda_bot/app/repository"
 	"github.com/cancelledbit/pizda_bot/app/stat"
@@ -10,12 +17,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
-	"log"
-	"math/rand"
-	"os"
-	"regexp"
-	"strconv"
-	"time"
 )
 
 func main() {
