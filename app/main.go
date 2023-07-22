@@ -112,7 +112,7 @@ func handleSpecialChatEvents(update tgbotapi.Update, db *sql.DB) {
 	}
 
 	if update.Message.From.ID == 5865654725 {
-		pattern := "/(ир[ао])/(секс)|(муж)|(п[еи]зд)|(сос)/iu"
+		pattern := "/(\\sир[ао])|(\\sсекс)|(\\sмуж)|(\\sп[еи]зд)|(\\sсос)/iu"
 		if rgx, err := regexp.Compile(pattern); err == nil {
 			log.Println("compiled")
 			if rgx.MatchString(update.Message.Text) {
