@@ -99,7 +99,7 @@ func main() {
 
 func handleSpecialChatEvents(update tgbotapi.Update, db *sql.DB) {
 	if update.Message.From.ID == 5167519420 {
-		pattern := "/(\\sпис[яею])|(\\sпоп[аук])|(износ)|(\\sвон[яю])|(\\sнож[ек])|(\\sслад)|(\\sхагз)|(\\sдево[нч])|(черк)|(лиза)|(\\sкончи)|(\\sжоп)/u"
+		pattern := "/(\\sпис[яею])|(\\sпоп[аук])|(износ)|(\\sвон[яю])|(\\sнож[ек])|(\\sслад)|(\\sхагз)|(\\sдево[нч])|(черк)|(лиза)|(\\sкончи)|(\\sжоп)|(\\sузбе)/u"
 		if rgx, err := regexp.Compile(pattern); err == nil {
 			log.Println("compiled")
 			if rgx.MatchString(update.Message.Text) {
