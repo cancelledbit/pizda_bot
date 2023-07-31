@@ -17,7 +17,7 @@ func getHagzorCmd(db *sql.DB, bot *tgbotapi.BotAPI) EUWisdomCmd {
 				DB:   db,
 				Bot:  bot,
 			},
-			AuthorId: "5167519420",
+			AuthorId: "5865654725",
 			UserName: "hagz0r",
 		},
 	}
