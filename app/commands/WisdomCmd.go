@@ -38,7 +38,7 @@ func (c WisdomCmd) Execute(cmd *tgbotapi.Message) {
 func GetWisdomUserPattern(userId int64) (string, error) {
 	config := map[int64]string{
 		5167519420: "/(\\sпис[яею])|(\\sпоп[аук])|(износ)|(\\sвон[яю])|(\\sнож[ек])|(\\sслад)|(\\sхагз)|(\\sдево[нч])|(черк)|(лиза)|(\\sкончи)|(\\sжоп)/u",
-		5865654725: "/\\s((sир[аоу])|(секс)|(муж)|(п[еи]зд)|(сос))/iu",
+		5865654725: "/\\s(ир[аоу])|(секс)|(муж)|(п[еи]зд)|(сос)|(ваг)|(сис)|(пис)|(ху)/iu",
 	}
 	pattern, ok := config[userId]
 	if ok {
