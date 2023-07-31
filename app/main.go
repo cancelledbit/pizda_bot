@@ -98,15 +98,20 @@ func main() {
 }
 
 func handleSpecialChatEvents(update tgbotapi.Update, db *sql.DB) {
-	if update.Message.From.ID == 5167519420 {
-		pattern := "/(\\sпис[яею])|(\\sпоп[аук])|(износ)|(\\sвон[яю])|(\\sнож[ек])|(\\sслад)|(\\sхагз)|(\\sдево[нч])|(черк)|(лиза)|(\\sкончи)|(\\sжоп)/u"
-		if rgx, err := regexp.Compile(pattern); err == nil {
-			log.Println("compiled")
-			if rgx.MatchString(update.Message.Text) {
-				log.Println("matched")
-				r := repository.NewMysqlEUPhrasesRepository(context.Background(), db)
-				_, _ = r.Create(&repository.EUPhrase{Text: update.Message.Text})
-			}
+	pattern, err := commands.GetWisdomUserPattern(update.Message.From.ID)
+	if err != nil {
+		return
+	}
+	if rgx, err := regexp.Compile(pattern); err == nil {
+		log.Println("compiled")
+		if rgx.MatchString(update.Message.Text) {
+			log.Println("matched")
+			r := repository.UserWisdomRepository(context.Background(), db)
+			_, _ = r.Create(
+				&repository.WisdomPhrase{Text: update.Message.Text,
+					AuthorId: strconv.FormatInt(update.Message.From.ID, 10),
+				},
+			)
 		}
 	}
 }
