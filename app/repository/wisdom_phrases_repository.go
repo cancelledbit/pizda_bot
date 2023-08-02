@@ -47,7 +47,7 @@ func (r MysqlUserWisdomRepository) Create(phrase *WisdomPhrase) (*WisdomPhrase, 
 	ctx, cancel := context.WithTimeout(r.ctx, 15*time.Second)
 	defer cancel()
 
-	query := `INSERT INTO wisdom_phrases (text, author)
+	query := `INSERT INTO wisdom_phrases (text, author_id)
 		VALUES (?, ?)
 		RETURNING id, text, author_id;`
 	row := r.db.QueryRowContext(
