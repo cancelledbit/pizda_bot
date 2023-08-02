@@ -35,9 +35,9 @@ func (c WisdomCmd) Execute(cmd *tgbotapi.Message) {
 		log.Println(err)
 		return
 	}
-	text := ""
+	text := fmt.Sprintf("%s когда то сказал: \n", c.UserName)
 	for _, p := range phrases {
-		text += fmt.Sprintf("%s %s: \n%s \n", c.UserName, "wisdom", p.Text)
+		text += fmt.Sprintf("%s \n", p.Text)
 	}
 
 	reply := tgbotapi.NewMessage(cmd.Chat.ID, text)
