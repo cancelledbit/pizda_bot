@@ -20,7 +20,7 @@ type WisdomCmd struct {
 
 func (c WisdomCmd) Execute(cmd *tgbotapi.Message) {
 	count, err := strconv.Atoi(cmd.CommandArguments())
-	if err != nil {
+	if err != nil || count == 0 {
 		count = 1
 	}
 
