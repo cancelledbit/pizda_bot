@@ -8,6 +8,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"log"
 	"math"
+	"os"
 	"strconv"
 	"time"
 )
@@ -24,7 +25,12 @@ func (c WisdomCmd) Execute(cmd *tgbotapi.Message) {
 		count = 1
 	}
 
-	count = int(math.Min(float64(count), 3))
+	maxPhrases, err := strconv.Atoi(os.Getenv("MAX_PHRASES_GEN"))
+	if err != nil {
+		maxPhrases = 3
+	}
+
+	count = int(math.Min(float64(count), float64(maxPhrases)))
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
