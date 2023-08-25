@@ -41,7 +41,7 @@ func (c WisdomCmd) Execute(cmd *tgbotapi.Message) {
 		log.Println(err)
 		return
 	}
-	text := fmt.Sprintf("%s когда то сказал: \n", c.UserName)
+	text := fmt.Sprintf("%s когда-то сказал: \n", c.UserName)
 	for _, p := range phrases {
 		text += fmt.Sprintf("%s \n", p.Text)
 	}
@@ -60,6 +60,7 @@ func GetWisdomUserPattern(userId int64) (string, error) {
 		5865654725: "/\\s(ир[аоу])|(секс)|(муж)|(п[еи]зд)|(сос)|(ваг)|(сис)|(пис)|(ху)/iu",
 		409842850:  "/\\s(ебл)|(секс)|(муж)|(нарк)|(мото)|(дудк)|(трава)|(баб)|(гомо)|(геи)/iu",
 		5655245858: "/\\s(монгол)|(коре)|(казах)|(п[еи]тон)|(сперм)|(секс)|(ганд)|(джанг)|(апи)|(ма[мт])|(ксан)|(клуб)|(бар)|(рейв)/iu",
+		418587687:  "/.{80}/",
 	}
 	pattern, ok := config[userId]
 	if ok {
