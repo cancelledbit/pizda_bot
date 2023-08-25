@@ -31,6 +31,7 @@ func GetHandler(db *sql.DB, bot *tgbotapi.BotAPI) CommandHandler {
 			getEUCmd(db, bot),
 			getHagzorCmd(db, bot),
 			getAntonCmd(db, bot),
+			getDKCmd(db, bot),
 		},
 	}
 }
