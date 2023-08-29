@@ -25,7 +25,7 @@ func (c OpinionCmd) Execute(cmd *tgbotapi.Message) {
 		c.Bot.Send(reply)
 	}
 
-	text := "Мнение авторитетов 2ch/pr по данному вороосу:\n"
+	text := "Мнение авторитетов 2ch/pr по данному вопроосу:\n"
 
 	for id, data := range c.Members {
 		name := data[0]
@@ -59,7 +59,7 @@ func getOpinionCmd(db *sql.DB, bot *tgbotapi.BotAPI) OpinionCmd {
 			"5167519420": {"EU", ""},
 			"5865654725": {"hagz0r", ""},
 			"5655245858": {"Anton", ""},
-			"418587687":  {"Double Keeper", " AND LENGTH(text) < 80"},
+			"418587687":  {"Double Keeper", " AND LENGTH(text) < 180"},
 		},
 	}
 }
