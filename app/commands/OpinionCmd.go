@@ -19,6 +19,11 @@ func (c OpinionCmd) Execute(cmd *tgbotapi.Message) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 	r := repository.UserWisdomRepository(ctx, c.DB)
+	if cmd.ReplyToMessage == nil {
+		reply := tgbotapi.NewMessage(cmd.Chat.ID, "Эта команда должна быть ответом на чье либо сообщение")
+		reply.ReplyToMessageID = cmd.MessageID
+		c.Bot.Send(reply)
+	}
 
 	text := "Мнение авторитетов 2ch/pr по данному вороосу:\n"
 
@@ -36,7 +41,7 @@ func (c OpinionCmd) Execute(cmd *tgbotapi.Message) {
 		text += fmt.Sprintf("\t%s: %s\n", name, phrases[0].Text)
 	}
 	reply := tgbotapi.NewMessage(cmd.Chat.ID, text)
-	reply.ReplyToMessageID = cmd.MessageID
+	reply.ReplyToMessageID = cmd.ReplyToMessage.MessageID
 	_, err := c.Bot.Send(reply)
 	if err != nil {
 		log.Println(err)
@@ -54,7 +59,7 @@ func getOpinionCmd(db *sql.DB, bot *tgbotapi.BotAPI) OpinionCmd {
 			"5167519420": {"EU", ""},
 			"5865654725": {"hagz0r", ""},
 			"5655245858": {"Anton", ""},
-			"418587687":  {"Double Keeper", "AND LENGTH(text) < 80"},
+			"418587687":  {"Double Keeper", " AND LENGTH(text) < 80"},
 		},
 	}
 }
