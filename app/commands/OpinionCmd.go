@@ -25,7 +25,7 @@ func (c OpinionCmd) Execute(cmd *tgbotapi.Message) {
 		c.Bot.Send(reply)
 	}
 
-	text := "Мнение авторитетов 2ch/pr по данному вопросу:\n"
+	text := "Мнение авторитетов 2ch /pr/ по данному вопросу:\n"
 
 	for id, data := range c.Members {
 		name := data[0]
