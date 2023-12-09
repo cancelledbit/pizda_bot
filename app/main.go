@@ -3,6 +3,13 @@ package main
 import (
 	"context"
 	"database/sql"
+	"log"
+	"math/rand"
+	"os"
+	"regexp"
+	"strconv"
+	"time"
+
 	"github.com/cancelledbit/pizda_bot/app/commands"
 	"github.com/cancelledbit/pizda_bot/app/repository"
 	"github.com/cancelledbit/pizda_bot/app/stat"
@@ -10,17 +17,13 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
-	"log"
-	"math/rand"
-	"os"
-	"regexp"
-	"strconv"
-	"time"
 )
 
 func main() {
 	initEnv()
 	bot := initBot()
+
+	updateMyCommands(bot)
 
 	throttlingTimeout := getThrottlingTimeout()
 
@@ -139,6 +142,36 @@ func initBot() (bot *tgbotapi.BotAPI) {
 	}
 	bot.Debug = true
 	return
+}
+
+func updateMyCommands(bot *tgbotapi.BotAPI) {
+	cmds := []tgbotapi.BotCommand{
+		{
+			Command:     "/gpt",
+			Description: "Generate Wisdom (OpenAI GPT-4 Turbo) 🗿🗿",
+		},
+		{
+			Command:     "/hz",
+			Description: "Sends Hagz0r Wisdom",
+		},
+		{
+			Command:     "/eu",
+			Description: "Sends Wild Billy (EU) Wisdom",
+		},
+		{
+			Command:     "/dk",
+			Description: "Sends Double Keeper Wisdom",
+		},
+		{
+			Command:     "/anton",
+			Description: "Sends Anton Wisdom",
+		},
+	}
+
+	config := tgbotapi.NewSetMyCommands(cmds...)
+
+	bot.Request(config)
+
 }
 
 func getThrottlingTimeout() int {
