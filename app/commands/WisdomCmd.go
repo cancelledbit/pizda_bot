@@ -36,7 +36,7 @@ func (c WisdomCmd) Execute(cmd *tgbotapi.Message) {
 	defer cancel()
 	r := repository.UserWisdomRepository(ctx, c.DB)
 
-	phrases, err := r.Get(c.AuthorId, count)
+	phrases, err := r.Get(c.AuthorId, count, "")
 	if err != nil {
 		log.Println(err)
 		return

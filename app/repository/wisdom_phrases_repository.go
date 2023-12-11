@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
 	"time"
 )
@@ -18,8 +19,8 @@ func UserWisdomRepository(ctx context.Context, db *sql.DB) *MysqlUserWisdomRepos
 	}
 }
 
-func (r MysqlUserWisdomRepository) Get(authorId string, count int) ([]*WisdomPhrase, error) {
-	query := "SELECT id, text, author_id FROM wisdom_phrases where author_id = ? ORDER BY RAND() LIMIT ?;"
+func (r MysqlUserWisdomRepository) Get(authorId string, count int, customWhere string) ([]*WisdomPhrase, error) {
+	query := fmt.Sprintf("SELECT id, text, author_id FROM wisdom_phrases where author_id = ? %s ORDER BY RAND() LIMIT ?;", customWhere)
 	ctx, cancel := context.WithTimeout(r.ctx, 15*time.Second)
 	defer cancel()
 
