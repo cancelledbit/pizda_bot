@@ -23,7 +23,9 @@ func main() {
 	initEnv()
 	bot := initBot()
 
-	updateMyCommands(bot)
+	const OurChatID = -1001169383931 // https://t.me/pr2ch
+
+	updateMyCommands(bot, []int64{OurChatID})
 
 	throttlingTimeout := getThrottlingTimeout()
 
@@ -144,41 +146,39 @@ func initBot() (bot *tgbotapi.BotAPI) {
 	return
 }
 
-func updateMyCommands(bot *tgbotapi.BotAPI) {
-	const OurChatID = -1001169383931 // https://t.me/pr2ch
+func updateMyCommands(bot *tgbotapi.BotAPI, ChatIDs []int64) {
+	for _, ChatID := range ChatIDs {
+		Scope := tgbotapi.NewBotCommandScopeChat(ChatID)
 
-	Scope := tgbotapi.NewBotCommandScopeChat(OurChatID)
+		Cmds := []tgbotapi.BotCommand{
+			{
+				Command:     "/gpt",
+				Description: "Generate Wisdom (OpenAI GPT-4 Turbo) 🗿🗿",
+			},
+			{
+				Command:     "/hz",
+				Description: "Sends Hagz0r Wisdom",
+			},
+			{
+				Command:     "/eu",
+				Description: "Sends Wild Billy (EU) Wisdom",
+			},
+			{
+				Command:     "/dk",
+				Description: "Sends Double Keeper Wisdom",
+			},
+			{
+				Command:     "/anton",
+				Description: "Sends Anton Wisdom",
+			},
+		}
 
-	Cmds := []tgbotapi.BotCommand{
-		{
-			Command:     "/gpt",
-			Description: "Generate Wisdom (OpenAI GPT-4 Turbo) 🗿🗿",
-		},
-		{
-			Command:     "/hz",
-			Description: "Sends Hagz0r Wisdom",
-		},
-		{
-			Command:     "/eu",
-			Description: "Sends Wild Billy (EU) Wisdom",
-		},
-		{
-			Command:     "/dk",
-			Description: "Sends Double Keeper Wisdom",
-		},
-		{
-			Command:     "/anton",
-			Description: "Sends Anton Wisdom",
-		},
+		Delete := tgbotapi.NewDeleteMyCommands() // This deletes commands from all chats !
+		bot.Request(Delete)
+
+		Config := tgbotapi.NewSetMyCommandsWithScope(Scope, Cmds...)
+		bot.Request(Config)
 	}
-
-	Delete := tgbotapi.NewDeleteMyCommands()
-
-	bot.Request(Delete)
-
-	Config := tgbotapi.NewSetMyCommandsWithScope(Scope, Cmds...)
-
-	bot.Request(Config)
 
 }
 
