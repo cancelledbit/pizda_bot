@@ -19,13 +19,13 @@ import (
 	"github.com/joho/godotenv"
 )
 
+const ourChatID = -1001169383931 // https://t.me/pr2ch
+
 func main() {
 	initEnv()
 	bot := initBot()
 
-	const OurChatID = -1001169383931 // https://t.me/pr2ch
-
-	updateMyCommands(bot, []int64{OurChatID})
+	updateMyCommands(bot, []int64{ourChatID})
 
 	throttlingTimeout := getThrottlingTimeout()
 
@@ -146,9 +146,9 @@ func initBot() (bot *tgbotapi.BotAPI) {
 	return
 }
 
-func updateMyCommands(bot *tgbotapi.BotAPI, ChatIDs []int64) {
-	for _, ChatID := range ChatIDs {
-		Scope := tgbotapi.NewBotCommandScopeChat(ChatID)
+func updateMyCommands(bot *tgbotapi.BotAPI, chatIDs []int64) {
+	for _, chatID := range chatIDs {
+		scope := tgbotapi.NewBotCommandScopeChat(chatID)
 
 		Cmds := []tgbotapi.BotCommand{
 			{
@@ -173,11 +173,11 @@ func updateMyCommands(bot *tgbotapi.BotAPI, ChatIDs []int64) {
 			},
 		}
 
-		Delete := tgbotapi.NewDeleteMyCommands() // This deletes commands from all chats !
-		bot.Request(Delete)
+		deleteAllCommands := tgbotapi.NewDeleteMyCommands() // This deletes commands from all chats !
+		bot.Request(deleteAllCommands)
 
-		Config := tgbotapi.NewSetMyCommandsWithScope(Scope, Cmds...)
-		bot.Request(Config)
+		config := tgbotapi.NewSetMyCommandsWithScope(scope, Cmds...)
+		bot.Request(config)
 	}
 
 }
