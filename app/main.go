@@ -21,6 +21,7 @@ import (
 
 var chatIDs = [...]int64{
 	-1001169383931, // https://t.me/pr2ch
+	-1001441159098, // test
 }
 
 func main() {
@@ -149,9 +150,6 @@ func initBot() (bot *tgbotapi.BotAPI) {
 }
 
 func updateMyCommands(bot *tgbotapi.BotAPI, chatIDs []int64) {
-	deleteAllCommands := tgbotapi.NewDeleteMyCommands() // This deletes commands from all chats !
-	bot.Request(deleteAllCommands)
-
 	for _, chatID := range chatIDs {
 		scope := tgbotapi.NewBotCommandScopeChat(chatID)
 
@@ -181,7 +179,6 @@ func updateMyCommands(bot *tgbotapi.BotAPI, chatIDs []int64) {
 		config := tgbotapi.NewSetMyCommandsWithScope(scope, Cmds...)
 		bot.Request(config)
 	}
-
 }
 
 func getThrottlingTimeout() int {
