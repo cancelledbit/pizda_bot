@@ -145,7 +145,9 @@ func initBot() (bot *tgbotapi.BotAPI) {
 }
 
 func updateMyCommands(bot *tgbotapi.BotAPI) {
-	cmds := []tgbotapi.BotCommand{
+	Scope := tgbotapi.NewBotCommandScopeChat(-1001169383931) // https://t.me/pr2ch
+
+	Cmds := []tgbotapi.BotCommand{
 		{
 			Command:     "/gpt",
 			Description: "Generate Wisdom (OpenAI GPT-4 Turbo) 🗿🗿",
@@ -168,9 +170,13 @@ func updateMyCommands(bot *tgbotapi.BotAPI) {
 		},
 	}
 
-	config := tgbotapi.NewSetMyCommands(cmds...)
+	Delete := tgbotapi.NewDeleteMyCommands()
 
-	bot.Request(config)
+	bot.Request(Delete)
+
+	Config := tgbotapi.NewSetMyCommandsWithScope(Scope, Cmds...)
+
+	bot.Request(Config)
 
 }
 
