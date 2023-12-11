@@ -145,7 +145,9 @@ func initBot() (bot *tgbotapi.BotAPI) {
 }
 
 func updateMyCommands(bot *tgbotapi.BotAPI) {
-	Scope := tgbotapi.NewBotCommandScopeChat(-1001169383931) // https://t.me/pr2ch
+	const OurChatID = -1001169383931 // https://t.me/pr2ch
+
+	Scope := tgbotapi.NewBotCommandScopeChat(OurChatID)
 
 	Cmds := []tgbotapi.BotCommand{
 		{
