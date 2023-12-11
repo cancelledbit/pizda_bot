@@ -19,13 +19,15 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const ourChatID = -1001169383931 // https://t.me/pr2ch
+var chatIDs = [...]int64{
+	-1001169383931, // https://t.me/pr2ch
+}
 
 func main() {
 	initEnv()
 	bot := initBot()
 
-	updateMyCommands(bot, []int64{ourChatID})
+	updateMyCommands(bot, chatIDs[:])
 
 	throttlingTimeout := getThrottlingTimeout()
 
